@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# OS generated files
+.DS_Store
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+
+# Parquet storage data
+data/
+
+# Context folder 
+Context/
