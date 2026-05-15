@@ -24,11 +24,19 @@ def normalize_data(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
     else:
         df.columns = [str(col).lower() for col in df.columns]
     
-    # Ensure standard schema exists, yfinance might use 'date' or 'datetime'
-    if 'date' in df.columns:
-        df.rename(columns={'date': 'timestamp'}, inplace=True)
-    elif 'datetime' in df.columns:
-        df.rename(columns={'datetime': 'timestamp'}, inplace=True)
+    # After lowercasing, look for date/datetime/index columns
+    date_col = None
+    for candidate in ['date', 'datetime', 'index']:
+        if candidate in df.columns:
+            date_col = candidate
+            break
+
+    if date_col:
+        df.rename(columns={date_col: 'timestamp'}, inplace=True)
+    elif 'timestamp' not in df.columns:
+        raise ValueError(
+            f"Could not find a date/datetime column in columns: {list(df.columns)}"
+        )
     
     # Keep only needed columns; if adj close exists, drop it
     expected_cols = ['timestamp', 'open', 'high', 'low', 'close', 'volume']
@@ -36,7 +44,9 @@ def normalize_data(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
     for col in expected_cols:
         if col not in df.columns:
             if col == 'timestamp':
-                raise ValueError("Could not find date/datetime column to map to timestamp.")
+                raise ValueError(
+                    f"Could not find a date/datetime column in columns: {list(df.columns)}"
+                )
             else:
                 df[col] = np.nan
                 
