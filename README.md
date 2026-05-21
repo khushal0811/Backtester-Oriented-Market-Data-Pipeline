@@ -3,6 +3,11 @@
 ## Overview
 A deterministic, reusable data pipeline designed specifically for event-driven backtesting engines. It ingests historical OHLCV market data and dividend history, enforces a strict normalization schema, stores data efficiently, and exposes a high-performance event stream interface with split-adjusted pricing.
 
+Part of a three-repo trading system workspace:
+- **This repo** — Market Data Pipeline (data ingestion, normalization, storage, event streaming)
+- [Event-Driven Backtesting Engine](https://github.com/khushal0811/Event-Driven-Backtesting-Engine) — Strategy simulation engine
+- [Strategy Research Terminal](https://github.com/khushal0811/strategy-research-terminal) — Full-stack research UI
+
 ## Architecture
 The pipeline is designed in discrete phases to maintain modularity and correctness:
 1. **Ingestion**: Fetches raw historical data using `yfinance` with `auto_adjust=True` for split-corrected, dividend-adjusted pricing. Optionally fetches dividend history.
