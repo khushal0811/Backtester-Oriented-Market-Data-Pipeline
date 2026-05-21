@@ -20,7 +20,18 @@ def normalize_data(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
     
     # Flatten columns if they are a MultiIndex (happens in newer yfinance versions)
     if isinstance(df.columns, pd.MultiIndex):
-        df.columns = [str(col[0]).lower() for col in df.columns]
+        new_cols = []
+        for col in df.columns:
+            # col is a tuple, e.g. ('Close', 'AAPL') or ('AAPL', 'Close')
+            # Find which level looks like a price metric or date/time
+            metric_col = str(col[0])
+            for part in col:
+                part_lower = str(part).lower()
+                if part_lower in ['open', 'high', 'low', 'close', 'volume', 'adj close', 'date', 'datetime', 'timestamp']:
+                    metric_col = str(part)
+                    break
+            new_cols.append(metric_col.lower())
+        df.columns = new_cols
     else:
         df.columns = [str(col).lower() for col in df.columns]
     
