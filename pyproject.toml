@@ -1,3 +1,18 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "market-data-pipeline"
+version = "0.1.0"
+description = "Backtester-oriented market data pipeline"
+requires-python = ">=3.10"
+dependencies = ["pandas", "pyarrow", "yfinance"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["market_data*"]
+
 [tool.pyrefly]
 python_interpreter = "venv/bin/python3"
 search_path = [".", "venv/lib/python3.14/site-packages"]
