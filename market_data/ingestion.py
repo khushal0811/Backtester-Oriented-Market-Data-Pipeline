@@ -71,6 +71,12 @@ def fetch_dividends(symbol: str, start: str, end: str) -> Optional[pd.DataFrame]
         if divs is None or divs.empty:
             return None
 
+        # Normalize index to UTC
+        if divs.index.tz is None:
+            divs.index = divs.index.tz_localize("UTC")
+        else:
+            divs.index = divs.index.tz_convert("UTC")
+
         # Filter to requested date range
         divs = divs[(divs.index >= pd.Timestamp(start, tz="UTC"))
                     & (divs.index <= pd.Timestamp(end, tz="UTC"))]
